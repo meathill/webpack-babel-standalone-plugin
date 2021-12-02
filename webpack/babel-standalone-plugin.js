@@ -61,16 +61,20 @@ class BabelStandalonePlugin {
     }  
     document.head.appendChild(script);
     if (${this.options.condition}) {
-        Babel.transformScriptTags({
-          length: 1,
-          item: function() {
-            return script;
-          }
-        });
-        // 手动触发 \`load\` 事件，避免超时
-        setTimeout(function () {
+      var results = Babel.transformScriptTags({
+        length: 1,
+        item: function() {
+          return script;
+        }
+      });
+      var result = results && results.length ? results[0] : null;
+      if (result) {
+        result.done = function () {
+          // 手动触发 \`load\` 事件，避免超时
           onScriptComplete({type: 'load', target: script, from: '${PLUGIN_NAME}'});
-        }, 50);
+          result.done = null;
+        }  
+      }
     }
 ${source.substring(index + appendLine.length + 1)}`; // \`1\` is line break
 
