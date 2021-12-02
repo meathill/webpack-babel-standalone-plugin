@@ -3,9 +3,9 @@ const arr = [];
 arr[1] = 'foo';
 
 async function foo() {
-    const greeting = await import('./lib');
+    let greeting = await import('./lib');
+    greeting = await greeting.default();
     console.log(greeting);
-    console.log(next);
 }
 foo();
 

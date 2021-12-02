@@ -17,11 +17,11 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: resolve(__dirname, './node_modules/babel-polyfill/dist/polyfill.min.js'),
+          from: resolve(__dirname, './node_modules/babel-polyfill/dist/polyfill.js'),
           to: 'babel-polyfill.min.js',
         },
         {
-          from: resolve(__dirname, './node_modules/babel-standalone/babel.min.js'),
+          from: resolve(__dirname, './node_modules/babel-standalone/babel.js'),
           to: 'babel.min.js',
         },
       ],

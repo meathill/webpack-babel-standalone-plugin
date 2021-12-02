@@ -3,19 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <title>Test</title>
+
+  <script>
+    window.isIE11 = true;
+    /* global Babel */
+    document.addEventListener('DOMContentLoaded', function () {
+      function insertPreload(type) {
+        var preload = document.createElement('script');
+        preload.src = 'main.js';
+        if (type) {
+          preload.type = type;
+        }
+        document.body.appendChild(preload);
+        if (type) {
+          /* global Babel */
+          // babel-standalone 对动态加载的标签需要手动调用执行方法
+          Babel.transformScriptTags({
+            length: 1,
+            item() {
+              return preload;
+            },
+          });
+        }
+      }
+
+      // 古老浏览器，需要插入 babel-polyfill 和 babel-standalone
+      var script;
+      if (isIE11) {
+        script = document.createElement('script');
+        script.src = 'babel-polyfill.min.js';
+        document.body.appendChild(script);
+        script.onload = function () {
+          script.src = 'babel.min.js';
+          document.body.appendChild(script);
+        };
+        script = document.createElement('script');
+      }
+      if (script) {
+        script.onload = function () {
+          insertPreload('text/babel');
+        };
+      } else {
+        insertPreload();
+      }
+    });
+  </script>
 </head>
 <body>
 <h1>hello</h1>
-<script src="babel-polyfill.min.js"></script>
-<script src="babel.min.js"></script>
-<script>
-window.isIE11 = true;
-/* global Babel */
-const script = document.createElement('script');
-script.type = 'text/babel';
-script.src = 'main.js';
-document.body.appendChild(script);
-Babel.transformScriptTags();
-</script>
 </body>
 </html>
