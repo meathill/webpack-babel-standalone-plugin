@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test</title>
+</head>
+<body>
+<h1>hello</h1>
+<script src="babel-polyfill.min.js"></script>
+<script src="babel.min.js"></script>
+<script>
+window.isIE11 = true;
+/* global Babel */
+const script = document.createElement('script');
+script.type = 'text/babel';
+script.src = 'main.js';
+document.body.appendChild(script);
+Babel.transformScriptTags();
+</script>
+</body>
+</html>
