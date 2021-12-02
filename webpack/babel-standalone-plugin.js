@@ -1,4 +1,5 @@
 const {validate} = require('schema-utils');
+const defaults = require('lodash.defaults');
 
 const PLUGIN_NAME = 'BABEL_STANDALONE_PLUGIN';
 
@@ -8,12 +9,20 @@ const schema = {
     condition: {
       type: 'string',
     },
+    presets: {
+      type: 'string',
+    },
+    plugins: {
+      type: 'string',
+    },
   },
   additionalProperties: false,
 };
 
 const defaultOptions = {
   condition: 'window.isIE11',
+  presets: 'es2015,es2016,es2017,react',
+  plugins: '',
 };
 
 class BabelStandalonePlugin {
@@ -22,7 +31,7 @@ class BabelStandalonePlugin {
       name: PLUGIN_NAME,
       baseDataPath: 'options',
     });
-    this.options = Object.assign(defaultOptions, options);
+    this.options = defaults({}, options, defaultOptions);
   }
 
   apply(compiler) {
@@ -47,6 +56,8 @@ class BabelStandalonePlugin {
           source = `${source.substring(0, index)}// 插入适配 babel-standalone
     if (${this.options.condition}) {
       script.type = 'text/babel';
+      script.setAttribute('data-presets', '${this.options.presets}');
+      script.setAttribute('data-plugins', '${this.options.plugins}');
     }  
     document.head.appendChild(script);
     if (${this.options.condition}) {

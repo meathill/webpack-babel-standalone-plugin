@@ -13,6 +13,7 @@
         preload.src = 'main.js';
         if (type) {
           preload.type = type;
+          preload.setAttribute('data-presets', 'es2015, es2016, es2017');
         }
         document.body.appendChild(preload);
         if (type) {
@@ -20,7 +21,7 @@
           // babel-standalone 对动态加载的标签需要手动调用执行方法
           Babel.transformScriptTags({
             length: 1,
-            item() {
+            item: function () {
               return preload;
             },
           });
